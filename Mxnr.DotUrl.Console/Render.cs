@@ -40,7 +40,6 @@ public static class Setup
             }
         }
 
-        // TODO better logic here
         root.Nodes[expandedIndex].Expand();
 
         return root;
