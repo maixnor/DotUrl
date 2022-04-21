@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using Mxnr.DotUrl.Console;
+using Mxnr.DotUrl.Requests;
 using Mxnr.DotUrl.Share;
 using Spectre.Console;
 
 var selectedIndex = 0;
+var requestService = new RequestService(new HttpClient());
 
 var requests = new List<Request>
 {
@@ -13,7 +15,7 @@ var requests = new List<Request>
 };
 
 Redraw();
-GameLoop();
+await GameLoop();
 
 void Redraw()
 {
@@ -22,7 +24,7 @@ void Redraw()
     AnsiConsole.Write(tree);
 }
 
-void GameLoop()
+async Task GameLoop()
 {
     while (true)
     {
@@ -45,6 +47,9 @@ void GameLoop()
                 break;
             // should trigger the currently selected request
             case ConsoleKey.Enter:
+                var request = requests.ElementAt(selectedIndex);
+                requests[selectedIndex] = request with {Response = await requestService.SendRequestAsync(request)};
+                Redraw();
                 break;
             // end/home go to last and first item
             case ConsoleKey.End:

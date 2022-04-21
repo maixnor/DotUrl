@@ -5,18 +5,24 @@ namespace Mxnr.DotUrl.Requests;
 
 public class RequestService
 {
-    private HttpClient _client = new();
-    
-    public async Task<Response> SendRequest(Request request)
+    private readonly HttpClient _client;
+
+    public RequestService(HttpClient client)
+    {
+        _client = client;
+    }
+
+    public async Task<Response> SendRequestAsync(Request request)
     {
         var stopwatch = Stopwatch.StartNew();
-        var message = _client.Send(new HttpRequestMessage(request.Method, request.Uri));
+        var message = await _client.SendAsync(new HttpRequestMessage(request.Method, request.Uri));
         var milliseconds = stopwatch.ElapsedMilliseconds;
         stopwatch.Stop();
         return new Response(
             await message.Content.ReadAsStringAsync(),
             milliseconds,
-            message.Headers.ToString());
+            message.StatusCode,
+            message.IsSuccessStatusCode);
     }    
 }
 

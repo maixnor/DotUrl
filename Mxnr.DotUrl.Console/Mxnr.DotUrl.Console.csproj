@@ -8,10 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Humanizer" Version="2.14.1" />
         <PackageReference Include="Spectre.Console" Version="0.44.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Mxnr.DotUrl.Requests\Mxnr.DotUrl.Requests.csproj" />
       <ProjectReference Include="..\Mxnr.DotUrl.Share\Mxnr.DotUrl.Share.csproj" />
     </ItemGroup>
     

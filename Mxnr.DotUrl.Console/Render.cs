@@ -1,3 +1,4 @@
+using Humanizer;
 using Mxnr.DotUrl.Share;
 using Spectre.Console;
 
@@ -18,25 +19,24 @@ public static class Setup
             // IDEA table caption (response table) for request time 
             
             var node = root.AddNode(uri).Collapse();
-            // request table
-            node.AddNode(new Table()
-                    .RoundedBorder()
-                    .AddColumn("Field")
-                    .AddColumn("Value")
-                    .AddRow("URI", uri)
-                    .AddRow("Method", httpMethod.Method)
-            );
-            // response table
+            var requestTable = new Table()
+                .RoundedBorder()
+                .AddColumn("Field")
+                .AddColumn("Value")
+                .AddRow("URI", uri)
+                .AddRow("Method", httpMethod.Method);
+            node.AddNode(requestTable);
             if (response is not null)
             {
-                node.AddNode(new Table()
+                var responseTable = new Table()
                     .RoundedBorder()
+                    .BorderColor(response.Success ? Color.LightGreen : Color.DarkRed)
                     .AddColumn("Field")
                     .AddColumn("Value")
-                    .AddRow("Time", response.Milliseconds.ToString()) // use humanoid here
-                    .AddRow("Result", response.Result)
-                    .AddRow("Headers", response.Headers)
-                );
+                    .AddRow("Time", TimeSpan.FromMilliseconds(response.Milliseconds).Humanize()) // TODO use humanize here for time display
+                    .AddRow("HTTP Status", $"({(int)response.Code}) {response.Code.ToString().Humanize()}")
+                    .AddRow("Result", Markup.Escape(response.Result[..Math.Min(300, response.Result.Length)]));
+                node.AddNode(responseTable);
             }
         }
 
