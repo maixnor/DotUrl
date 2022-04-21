@@ -6,9 +6,9 @@ public class FileStoreTests
 {
     private List<Request> _requests = new List<Request>
     {
-        new("https://google.com", HttpMethod.Get),
-        new("https://bing.com", HttpMethod.Get),
-        new("https://yahoo.com", HttpMethod.Get)
+        new("https://google.com", HttpMethod.Get, null),
+        new("https://bing.com", HttpMethod.Get, null),
+        new("https://yahoo.com", HttpMethod.Get, null)
     };
 
     
